@@ -14,7 +14,9 @@ export default function index() {
     <>
     {
      <Suspense fallback={<div>Loading...</div>}>
-       <NodeChartDynamic />
+      <div id="graph">
+        <NodeChartDynamic />
+      </div>
      </Suspense>
     }
     </>

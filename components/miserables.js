@@ -2,26 +2,18 @@ import React from 'react'
 
 import {  ForceGraph3D  } from 'react-force-graph';
 
+import 'three';
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
-// Random data
-/*
-const N = 30;
-const gData = {
-  nodes: [...Array(N).keys()].map((i) => ({ id: i })),
-  links: [...Array(N).keys()]
-    .filter((id) => id)
-    .map((id) => ({
-      source: id,
-      target: Math.round(Math.random() * (id - 1))
-    }))
-};
-*/
+const extraRenderers = [new CSS2DRenderer()];
+
 
 // const gData = await fetch(process.env.BASE_URL+'data/miserables.json', { cache: 'no-store' })
 const gData = {
   "nodes": [
-    {"id": "Myriel", "group": 1},
-    {"id": "Napoleon", "group": 1},
+    {"id": "Myriel", "group": 1, "color": "red", "text": "Myriel"},
+    {"id": "Napoleon", "group": 1, "color": "blue"},
     {"id": "Mlle.Baptistine", "group": 1},
     {"id": "Mme.Magloire", "group": 1},
     {"id": "CountessdeLo", "group": 1},
@@ -359,10 +351,19 @@ const gData = {
 export default function BasicNodeChart() {
   return (
     <ForceGraph3D
-      backgroundColor={"rgba(0,0,0,0)"}
-      nodeColor={() => "red"}
-      linkColor={() => "blue"}
-      graphData={gData}
-    />
+    extraRenderers={extraRenderers}
+    graphData={gData}
+    nodeAutoColorBy="group"
+    nodeThreeObjectExtend={true}
+    nodeThreeObject={node => {
+      const nodeEl = document.createElement('div');
+      nodeEl.textContent = node.id;
+      nodeEl.color = node.color;
+      nodeEl.style.color = node.color;
+      nodeEl.className = 'node-label';
+      const graphOb = new CSS2DObject(nodeEl);
+      return graphOb;
+    }}
+  />
   );
 }
