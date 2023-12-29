@@ -1,18 +1,19 @@
 import React, {useEffect, useState, Suspense} from 'react'
-import dynamic from "next/dynamic";
-
-const NodeChartDynamic = dynamic(() => import("@components/miserables"), {
-ssr: false,
-});
-
-
+/*
+const NodeChartDynamic = React.lazy(()=> import('@/components/Graph/Miserables') );
+*/
 export default function index() {
   const [isLoaded, setIsLoaded]  = useState(false);
   
+  useEffect(async () => {
+    // Client-side-only code
+
+    setIsLoaded(true)
+  })
 
   return (
     <>
-    {
+    {isLoaded &&
      <Suspense fallback={<div>Loading...</div>}>
        <NodeChartDynamic />
      </Suspense>
